@@ -350,11 +350,11 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         let view = self.view
-        let swipeUpRecognizer = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
+        let swipeUpRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(MyStreamingMovieViewController.handleSwipe(_:)))
         swipeUpRecognizer.direction = .Up
         view.addGestureRecognizer(swipeUpRecognizer)
         
-        let swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
+        let swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(MyStreamingMovieViewController.handleSwipe(_:)))
         swipeDownRecognizer.direction = .Down
         view.addGestureRecognizer(swipeDownRecognizer)
         
@@ -626,7 +626,7 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
         /* When the player item has played to its end time we'll toggle
         the movie controller Pause button to be the Play button */
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "playerItemDidReachEnd:",
+            selector: #selector(MyStreamingMovieViewController.playerItemDidReachEnd(_:)),
             name: AVPlayerItemDidPlayToEndTimeNotification,
             object: self.playerItem)
         
