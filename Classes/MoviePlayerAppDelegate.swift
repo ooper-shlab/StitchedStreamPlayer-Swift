@@ -66,7 +66,7 @@ class MoviePlayerAppDelegate: NSObject, UIApplicationDelegate, UITabBarControlle
     @IBOutlet var streamingViewController: MyStreamingMovieViewController?
     
     
-    func applicationDidFinishLaunching(application: UIApplication) {
+    func applicationDidFinishLaunching(_ application: UIApplication) {
         // Add the streaming view controller's current view as a subview of the window
         window?.rootViewController = streamingViewController
         

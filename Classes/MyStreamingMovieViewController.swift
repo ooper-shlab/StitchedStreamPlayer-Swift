@@ -71,7 +71,7 @@ private var MyStreamingMovieViewControllerPlayerItemStatusObserverContext_ = 0
 @objc(MyStreamingMovieViewController)
 class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     
-    var movieURL: NSURL?
+    var movieURL: URL?
     var player: AVPlayer?
     var playerItem: AVPlayerItem?
     @IBOutlet var playerLayerView: MyPlayerLayerView!
@@ -134,13 +134,13 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func enablePlayerButtons() {
-        self.playButton.enabled = true
-        self.stopButton.enabled = true
+        self.playButton.isEnabled = true
+        self.stopButton.isEnabled = true
     }
     
     private func disablePlayerButtons() {
-        self.playButton.enabled = false
-        self.stopButton.enabled = false
+        self.playButton.isEnabled = false
+        self.stopButton.isEnabled = false
     }
     
     //MARK: Scrubber control
@@ -148,13 +148,13 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     /* Set the scrubber based on the player current time. */
     private func syncScrubber() {
         let playerDuration = self.playerItemDuration()
-        if CMTIME_IS_INVALID(playerDuration) {
+        if !playerDuration.isValid {
             movieTimeControl.minimumValue = 0.0
             return
         }
         
         let duration = CMTimeGetSeconds(playerDuration)
-        if isfinite(duration) && duration > 0 {
+        if duration.isFinite && duration > 0 {
             let minValue = movieTimeControl.minimumValue
             let maxValue = movieTimeControl.maximumValue
             let time = CMTimeGetSeconds(player!.currentTime())
@@ -168,20 +168,20 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
         var interval = 0.1
         
         let playerDuration = self.playerItemDuration()
-        if CMTIME_IS_INVALID(playerDuration) {
+        if !playerDuration.isValid {
             return
         }
         let duration = CMTimeGetSeconds(playerDuration)
-        if isfinite(duration) {
-            let width = CGRectGetWidth(movieTimeControl.bounds)
+        if duration.isFinite {
+            let width = movieTimeControl.bounds.width
             interval = 0.5 * duration / Double(width)
         }
         
         /* Update the scrubber during normal playback. */
-        timeObserver = player?.addPeriodicTimeObserverForInterval(CMTimeMakeWithSeconds(interval, Int32(NSEC_PER_SEC)),
+        timeObserver = player?.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(interval, Int32(NSEC_PER_SEC)),
             queue: nil) {time in
                 self.syncScrubber()
-        }
+        } as AnyObject?
     }
     
     /* Cancels the previously registered time observer. */
@@ -205,18 +205,18 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     @IBAction func endScrubbing(_: AnyObject) {
         if timeObserver == nil {
             let playerDuration = self.playerItemDuration()
-            if CMTIME_IS_INVALID(playerDuration) {
+            if !playerDuration.isValid {
                 return
             }
             
             let duration = CMTimeGetSeconds(playerDuration)
-            if isfinite(duration) {
-                let width = CGRectGetWidth(movieTimeControl.bounds)
+            if duration.isFinite {
+                let width = movieTimeControl.bounds.width
                 let tolerance = 0.5 * duration / Double(width)
                 
-                timeObserver = player?.addPeriodicTimeObserverForInterval(CMTimeMakeWithSeconds(tolerance, Int32(NSEC_PER_SEC)), queue: dispatch_get_main_queue()) {time in
+                timeObserver = player?.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(tolerance, Int32(NSEC_PER_SEC)), queue: DispatchQueue.main) {time in
                     self.syncScrubber()
-                }
+                } as AnyObject?
             }
         }
         
@@ -227,23 +227,23 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     }
     
     /* Set the player current time to match the scrubber position. */
-    @IBAction func scrub(sender: AnyObject) {
+    @IBAction func scrub(_ sender: AnyObject) {
         if let slider = sender as? UISlider {
             
             let playerDuration = self.playerItemDuration()
-            if CMTIME_IS_INVALID(playerDuration) {
+            if !playerDuration.isValid {
                 return
             }
             
             let duration = CMTimeGetSeconds(playerDuration)
-            if isfinite(duration) {
+            if duration.isFinite {
                 let minValue = slider.minimumValue
                 let maxValue = slider.maximumValue
                 let value = slider.value
                 
                 let time = duration * Double(value - minValue) / Double(maxValue - minValue)
                 
-                player?.seekToTime(CMTimeMakeWithSeconds(time, Int32(NSEC_PER_SEC)))
+                player?.seek(to: CMTimeMakeWithSeconds(time, Int32(NSEC_PER_SEC)))
             }
         }
     }
@@ -253,11 +253,11 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func enableScrubber() {
-        self.movieTimeControl.enabled = true
+        self.movieTimeControl.isEnabled = true
     }
     
     private func disableScrubber() {
-        self.movieTimeControl.enabled = false
+        self.movieTimeControl.isEnabled = false
     }
     
     /* Prevent the slider from seeking during Ad playback. */
@@ -265,7 +265,7 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
         let seekableTimeRanges = player?.currentItem?.seekableTimeRanges
         if seekableTimeRanges?.count ?? 0 > 0 {
             let range = seekableTimeRanges![0]
-            let timeRange = range.CMTimeRangeValue
+            let timeRange = range.timeRangeValue
             let startSeconds = CMTimeGetSeconds(timeRange.start)
             let durationSeconds = CMTimeGetSeconds(timeRange.duration)
             
@@ -282,7 +282,7 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
         before starting playback. */
         if seekToZeroBeforePlay {
             seekToZeroBeforePlay = false
-            player?.seekToTime(kCMTimeZero)
+            player?.seek(to: kCMTimeZero)
         }
         
         player?.play()
@@ -298,19 +298,19 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func loadMovieButtonPressed(_: AnyObject) {
         /* Has the user entered a movie URL? */
-        if let movieURLText = self.movieURLTextField.text where !movieURLText.isEmpty {
-            if let newMovieURL = NSURL(string: movieURLText) {
+        if let movieURLText = self.movieURLTextField.text, !movieURLText.isEmpty {
+            if let newMovieURL = URL(string: movieURLText) {
                 /*
                 Create an asset for inspection of a resource referenced by a given URL.
                 Load the values for the asset keys "tracks", "playable".
                 */
-                let asset = AVURLAsset(URL: newMovieURL, options: nil)
+                let asset = AVURLAsset(url: newMovieURL, options: nil)
                 
                 let requestedKeys = [kTracksKey, kPlayableKey]
                 
                 /* Tells the asset to load the values of any of the specified keys that are not already loaded. */
-                asset.loadValuesAsynchronouslyForKeys(requestedKeys) {
-                    dispatch_async(dispatch_get_main_queue()) {
+                asset.loadValuesAsynchronously(forKeys: requestedKeys) {
+                    DispatchQueue.main.async {
                         /* IMPORTANT: Must dispatch to main queue in order to operate on the AVPlayer and AVPlayerItem. */
                         self.prepareToPlayAsset(asset, withKeys: requestedKeys)
                     }
@@ -319,7 +319,7 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func textFieldShouldReturn(theTextField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ theTextField: UITextField) -> Bool {
         /* When the user presses return, take focus away from the text
         field so that the keyboard is dismissed. */
         if theTextField === self.movieURLTextField {
@@ -351,63 +351,63 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         let view = self.view
         let swipeUpRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(MyStreamingMovieViewController.handleSwipe(_:)))
-        swipeUpRecognizer.direction = .Up
-        view.addGestureRecognizer(swipeUpRecognizer)
+        swipeUpRecognizer.direction = .up
+        view?.addGestureRecognizer(swipeUpRecognizer)
         
         let swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(MyStreamingMovieViewController.handleSwipe(_:)))
-        swipeDownRecognizer.direction = .Down
-        view.addGestureRecognizer(swipeDownRecognizer)
+        swipeDownRecognizer.direction = .down
+        view?.addGestureRecognizer(swipeDownRecognizer)
         
         let scrubberItem = UIBarButtonItem(customView: movieTimeControl)
-        let flexItem = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
+        let flexItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
         toolBar.items = [playButton, flexItem, scrubberItem]
         
         super.viewDidLoad()
     }
     
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return .All
+    override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+        return .all
     }
-    override func preferredInterfaceOrientationForPresentation() -> UIInterfaceOrientation {
-        return .Portrait
+    override var preferredInterfaceOrientationForPresentation : UIInterfaceOrientation {
+        return .portrait
     }
     
-    @objc func handleSwipe(gestureRecognizer: UISwipeGestureRecognizer) {
+    @objc func handleSwipe(_ gestureRecognizer: UISwipeGestureRecognizer) {
         let view = self.view
         let direction = gestureRecognizer.direction
-        let location = gestureRecognizer.locationInView(view)
+        let location = gestureRecognizer.location(in: view)
         
-        if location.y < CGRectGetMidY(view.bounds) {
-            if direction == .Up {
-                UIView.animateWithDuration(0.2, animations: {
+        if location.y < (view?.bounds.midY)! {
+            if direction == .up {
+                UIView.animate(withDuration: 0.2, animations: {
                     self.navigationController?.setNavigationBarHidden(true, animated: true)
                     }, completion: {finished in
-                        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Slide)
+                        UIApplication.shared.setStatusBarHidden(true, with: .slide)
                 })
             }
-            if direction == .Down {
-                UIView.animateWithDuration(0.2, animations: {
-                    UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .Slide)
+            if direction == .down {
+                UIView.animate(withDuration: 0.2, animations: {
+                    UIApplication.shared.setStatusBarHidden(false, with: .slide)
                     }, completion: {finished in
                         self.navigationController?.setNavigationBarHidden(false, animated: true)
                 })
             }
         } else {
-            if direction == .Down {
-                if !toolBar.hidden {
-                    UIView.animateWithDuration(0.2, animations: {
-                        self.toolBar.transform = CGAffineTransformMakeTranslation(0.0, CGRectGetHeight(self.toolBar.bounds))
+            if direction == .down {
+                if !toolBar.isHidden {
+                    UIView.animate(withDuration: 0.2, animations: {
+                        self.toolBar.transform = CGAffineTransform(translationX: 0.0, y: self.toolBar.bounds.height)
                         }, completion: {finished in
-                            self.toolBar.hidden = true
+                            self.toolBar.isHidden = true
                     })
                 }
-            } else if direction == .Up {
-                if toolBar.hidden {
-                    toolBar.hidden = false
+            } else if direction == .up {
+                if toolBar.isHidden {
+                    toolBar.isHidden = false
                     
-                    UIView.animateWithDuration(0.2, animations: {
-                        self.toolBar.transform = CGAffineTransformIdentity
+                    UIView.animate(withDuration: 0.2, animations: {
+                        self.toolBar.transform = CGAffineTransform.identity
                         }, completion: {finished in})
                 }
             }
@@ -417,8 +417,8 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     deinit {
         timeObserver = nil
         movieURL = nil
-        NSNotificationCenter.defaultCenter().removeObserver(self,
-            name: AVPlayerItemDidPlayToEndTimeNotification,
+        NotificationCenter.default.removeObserver(self,
+            name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
             object: nil)
         self.player?.removeObserver(self, forKeyPath: kCurrentItemKey)
         self.player?.removeObserver(self, forKeyPath: kTimedMetadataKey)
@@ -436,7 +436,7 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     
     private func playerItemDuration() -> CMTime {
         let thePlayerItem = player?.currentItem
-        if thePlayerItem?.status == AVPlayerItemStatus.ReadyToPlay {
+        if thePlayerItem?.status == AVPlayerItemStatus.readyToPlay {
             /*
             NOTE:
             Because of the dynamic nature of HTTP Live Streaming Media, the best practice
@@ -464,7 +464,7 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     //MARK: Player Notifications
     
     /* Called when the player item has played to its end time. */
-    @objc func playerItemDidReachEnd(aNotification: NSNotification) {
+    @objc func playerItemDidReachEnd(_ aNotification: Notification) {
         /* Hide the 'Pause' button, show the 'Play' button in the slider control */
         self.showPlayButton()
         
@@ -477,7 +477,7 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     //MARK: Timed metadata
     //MARK: -
     
-    private func handleTimedMetadata(timedMetadata: AVMetadataItem) {
+    private func handleTimedMetadata(_ timedMetadata: AVMetadataItem) {
         /* We expect the content to contain plists encoded as timed metadata. AVPlayer turns these into NSDictionaries. */
         if (timedMetadata.key as! String) == AVMetadataID3MetadataKeyGeneralEncapsulatedObject {
             if let propertyList = timedMetadata.value as? [String: AnyObject] {
@@ -497,7 +497,7 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
                         self.enablePlayerButtons()
                         self.enableScrubber() /* Enable seeking for main content. */
                         
-                        NSLog("enabling seek at %g", CMTimeGetSeconds(player?.currentTime() ?? CMTime()))
+                        NSLog("enabling seek at %g", (player?.currentTime() ?? CMTime()).seconds)
                     } else {
                         /* Display text indicating that an Ad is now playing. */
                         self.isPlayingAdText.text = "< Ad now playing, seeking is disabled on the movie controller... >"
@@ -505,7 +505,7 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
                         self.disablePlayerButtons()
                         self.disableScrubber()
                         
-                        NSLog("disabling seek at %g", CMTimeGetSeconds(player?.currentTime() ?? CMTime()))
+                        NSLog("disabling seek at %g", (player?.currentTime() ?? CMTime()).seconds)
                     }
                 }
             }
@@ -515,7 +515,7 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     //MARK: Ad list
     
     /* Update current ad list, set slider to match current player item seekable time ranges */
-    private func updateAdList(newAdList: [NSObject]) {
+    private func updateAdList(_ newAdList: [NSObject]) {
         if adList != newAdList {
             adList = newAdList
             
@@ -539,25 +539,17 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     **  3) the item did not become ready to play.
     ** ----------------------------------------------------------- */
     
-    private func assetFailedToPrepareForPlayback(error: NSError) {
+    private func assetFailedToPrepareForPlayback(_ error: NSError) {
         self.removePlayerTimeObserver()
         self.syncScrubber()
         self.disableScrubber()
         self.disablePlayerButtons()
         
         /* Display the error. */
-        if #available(iOS 8.0, *) {
-            let alertController = UIAlertController(title: error.localizedDescription, message: error.localizedFailureReason, preferredStyle: .Alert)
-            let okAction = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
-            alertController.addAction(okAction)
-            self.presentViewController(alertController, animated: true, completion: nil)
-        } else {
-            let alertView = UIAlertView(title: error.localizedDescription,
-                message: error.localizedFailureReason,
-                delegate: nil,
-                cancelButtonTitle: "OK")
-            alertView.show()
-        }
+        let alertController = UIAlertController(title: error.localizedDescription, message: error.localizedFailureReason, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     //MARK: Prepare to play asset
@@ -567,12 +559,12 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     Checks whether loading was successfull and whether the asset is playable.
     If so, sets up an AVPlayerItem and an AVPlayer to play the asset.
     */
-    private func prepareToPlayAsset(asset: AVURLAsset, withKeys requestedKeys: [String]) {
+    private func prepareToPlayAsset(_ asset: AVURLAsset, withKeys requestedKeys: [String]) {
         /* Make sure that the value of each key has loaded successfully. */
         for thisKey in requestedKeys {
             var error: NSError? = nil
-            let keyStatus = asset.statusOfValueForKey(thisKey, error: &error)
-            if keyStatus == .Failed {
+            let keyStatus = asset.statusOfValue(forKey: thisKey, error: &error)
+            if keyStatus == .failed {
                 self.assetFailedToPrepareForPlayback(error!)
                 return
             }
@@ -581,11 +573,11 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
         }
         
         /* Use the AVAsset playable property to detect whether the asset can be played. */
-        if !asset.playable {
+        if !asset.isPlayable {
             /* Generate an error describing the failure. */
             let localizedDescription = NSLocalizedString("Item cannot be played", comment: "Item cannot be played description")
             let localizedFailureReason = NSLocalizedString("The assets tracks were loaded, but could not be made playable.", comment: "Item cannot be played failure reason")
-            let errorDict: [NSObject: AnyObject] = [
+            let errorDict: [AnyHashable: Any] = [
                 NSLocalizedDescriptionKey: localizedDescription,
                 NSLocalizedFailureReasonErrorKey: localizedFailureReason
             ]
@@ -609,8 +601,8 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
             
             playerItem.removeObserver(self, forKeyPath: kStatusKey)
             
-            NSNotificationCenter.defaultCenter().removeObserver(self,
-                name: AVPlayerItemDidPlayToEndTimeNotification,
+            NotificationCenter.default.removeObserver(self,
+                name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
                 object: playerItem)
         }
         
@@ -620,14 +612,14 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
         /* Observe the player item "status" key to determine when it is ready to play. */
         self.playerItem?.addObserver(self,
             forKeyPath: kStatusKey,
-            options: [.Initial, .New],
+            options: [.initial, .new],
             context: &MyStreamingMovieViewControllerPlayerItemStatusObserverContext_)
         
         /* When the player item has played to its end time we'll toggle
         the movie controller Pause button to be the Play button */
-        NSNotificationCenter.defaultCenter().addObserver(self,
+        NotificationCenter.default.addObserver(self,
             selector: #selector(MyStreamingMovieViewController.playerItemDidReachEnd(_:)),
-            name: AVPlayerItemDidPlayToEndTimeNotification,
+            name: .AVPlayerItemDidPlayToEndTime,
             object: self.playerItem)
         
         seekToZeroBeforePlay = false
@@ -640,13 +632,13 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
             /* Observe the AVPlayer "currentItem" property to find out when any
             AVPlayer replaceCurrentItemWithPlayerItem: replacement will/did
             occur.*/
-            self.player!.addObserver(self, forKeyPath: kCurrentItemKey, options: [.Initial,.New], context: &MyStreamingMovieViewControllerCurrentItemObservationContext_)
+            self.player!.addObserver(self, forKeyPath: kCurrentItemKey, options: [.initial,.new], context: &MyStreamingMovieViewControllerCurrentItemObservationContext_)
             
             /* A 'currentItem.timedMetadata' property observer to parse the media stream timed metadata. */
             self.player!.addObserver(self, forKeyPath: kTimedMetadataKey, options: [], context: &MyStreamingMovieViewControllerTimedMetadataObserverContext_)
             
             /* Observe the AVPlayer "rate" property to update the scrubber control. */
-            self.player!.addObserver(self, forKeyPath: kRateKey, options: [.Initial,.New], context: &MyStreamingMovieViewControllerRateObservationContext_)
+            self.player!.addObserver(self, forKeyPath: kRateKey, options: [.initial,.new], context: &MyStreamingMovieViewControllerRateObservationContext_)
         }
         
         /* Make our new AVPlayerItem the AVPlayer's current item. */
@@ -654,7 +646,7 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
             /* Replace the player item with a new player item. The item replacement occurs
             asynchronously; observe the currentItem property to find out when the
             replacement will/did occur*/
-            self.player?.replaceCurrentItemWithPlayerItem(self.playerItem!)
+            self.player?.replaceCurrentItem(with: self.playerItem!)
             
             self.syncPlayPauseButtons()
         }
@@ -681,38 +673,38 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
     **  NOTE: this method is invoked on the main queue.
     ** ------------------------------------------------------- */
     
-    override func observeValueForKeyPath(path: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath path: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         /* AVPlayerItem "status" property value observer. */
         if context == &MyStreamingMovieViewControllerPlayerItemStatusObserverContext_ {
             self.syncPlayPauseButtons()
             
-            let status = change![NSKeyValueChangeNewKey] as! Int
+            let status = change![NSKeyValueChangeKey.newKey] as! Int
             switch status {
                 /* Indicates that the status of the player is not yet known because
                 it has not tried to load new media resources for playback */
-            case AVPlayerStatus.Unknown.rawValue:
+            case AVPlayerStatus.unknown.rawValue:
                 self.removePlayerTimeObserver()
                 self.syncScrubber()
                 
                 self.disableScrubber()
                 self.disablePlayerButtons()
                 
-            case AVPlayerStatus.ReadyToPlay.rawValue:
+            case AVPlayerStatus.readyToPlay.rawValue:
                 /* Once the AVPlayerItem becomes ready to play, i.e.
                 [playerItem status] == AVPlayerItemStatusReadyToPlay,
                 its duration can be fetched from the item. */
                 
-                playerLayerView.playerLayer.hidden = false
+                playerLayerView.playerLayer.isHidden = false
                 
-                toolBar.hidden = false
+                toolBar.isHidden = false
                 
                 /* Show the movie slider control since the movie is now ready to play. */
-                movieTimeControl.hidden = false
+                movieTimeControl.isHidden = false
                 
                 self.enableScrubber()
                 self.enablePlayerButtons()
                 
-                playerLayerView.playerLayer.backgroundColor = UIColor.blackColor().CGColor
+                playerLayerView.playerLayer.backgroundColor = UIColor.black.cgColor
                 
                 /* Set the AVPlayerLayer on the view to allow the AVPlayer object to display
                 its content. */
@@ -720,9 +712,9 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
                 
                 self.initScrubberTimer()
                 
-            case AVPlayerStatus.Failed.rawValue:
+            case AVPlayerStatus.failed.rawValue:
                 let thePlayerItem = object as! AVPlayerItem
-                self.assetFailedToPrepareForPlayback(thePlayerItem.error!)
+                self.assetFailedToPrepareForPlayback(thePlayerItem.error! as NSError)
             default:
                 break
             }
@@ -733,7 +725,7 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
             Called when the AVPlayer replaceCurrentItemWithPlayerItem:
             replacement will/did occur. */
         } else if context == &MyStreamingMovieViewControllerCurrentItemObservationContext_ {
-            let newPlayerItem = change![NSKeyValueChangeNewKey] as! AVPlayerItem
+            let newPlayerItem = change![NSKeyValueChangeKey.newKey] as! AVPlayerItem
             
             /* New player item null? */
             if newPlayerItem === NSNull() {
@@ -759,7 +751,7 @@ class MyStreamingMovieViewController: UIViewController, UITextFieldDelegate {
                 self.handleTimedMetadata(metadataItem)
             }
         } else {
-            super.observeValueForKeyPath(path, ofObject: object, change: change, context: context)
+            super.observeValue(forKeyPath: path, of: object, change: change, context: context)
         }
         
     }

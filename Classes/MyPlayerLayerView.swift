@@ -72,7 +72,7 @@ class MyPlayerLayerView: UIView {
     ** ------------------------------------------------------- */
     
     
-    override class func layerClass() -> AnyClass {
+    override class var layerClass : AnyClass {
         return AVPlayerLayer.self
     }
     
@@ -80,13 +80,13 @@ class MyPlayerLayerView: UIView {
         return self.layer as! AVPlayerLayer
     }
     
-    func setPlayer(player: AVPlayer) {
+    func setPlayer(_ player: AVPlayer) {
         (self.layer as! AVPlayerLayer).player = player
     }
     
     /* Specifies how the video is displayed within a player layer’s bounds.
     (AVLayerVideoGravityResizeAspect is default) */
-    func setVideoFillMode(fillMode: String) {
+    func setVideoFillMode(_ fillMode: String) {
         let playerLayer = self.layer as! AVPlayerLayer
         playerLayer.videoGravity = fillMode
     }
