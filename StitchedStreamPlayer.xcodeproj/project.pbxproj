@@ -20,10 +20,10 @@
 		AF66B2B4134BE57A00A83A05 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AF66B2AC134BE57A00A83A05 /* Icon@2x.png */; };
 		AF66B2B5134BE57A00A83A05 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = AF66B2AD134BE57A00A83A05 /* iTunesArtwork */; };
 		AF66B2B6134BE57A00A83A05 /* Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = AF66B2AE134BE57A00A83A05 /* Placeholder.png */; };
-		D72240631C0D0129002C6C11 /* MoviePlayerAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D72240621C0D0129002C6C11 /* MoviePlayerAppDelegate.swift */; };
-		D72240651C0D031C002C6C11 /* MyPlayerLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D72240641C0D031C002C6C11 /* MyPlayerLayerView.swift */; };
-		D77FEF7D1C368A5B00DC9183 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D77FEF7C1C368A5B00DC9183 /* Default-568h@2x.png */; };
-		D77FEF8B1C368FA900DC9183 /* MyStreamingMovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D72240661C0D073E002C6C11 /* MyStreamingMovieViewController.swift */; };
+		AFC612DB1CDB117E003917D6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AFC612DA1CDB117E003917D6 /* Default-568h@2x.png */; };
+		D7DA9A1A1E5073F000F9C60B /* MoviePlayerAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DA9A171E5073F000F9C60B /* MoviePlayerAppDelegate.swift */; };
+		D7DA9A1B1E5073F000F9C60B /* MyPlayerLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DA9A181E5073F000F9C60B /* MyPlayerLayerView.swift */; };
+		D7DA9A1C1E5073F000F9C60B /* MyStreamingMovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DA9A191E5073F000F9C60B /* MyStreamingMovieViewController.swift */; };
 		DB121E0D11A5D902005A0939 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB121E0C11A5D902005A0939 /* AVFoundation.framework */; };
 		DB2407CA11AF8CCC00A5312B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB2407C911AF8CCC00A5312B /* CoreMedia.framework */; };
 /* End PBXBuildFile section */
@@ -32,7 +32,6 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* StitchedStreamPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StitchedStreamPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		538CB4EF0DE329E400931BDA /* ReadMe.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
 		53F69CED0DDB4A390051C004 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		8487EAA90F8A5E2B00B9E9B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/StreamingView.xib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -45,11 +44,13 @@
 		AF66B2AC134BE57A00A83A05 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		AF66B2AD134BE57A00A83A05 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		AF66B2AE134BE57A00A83A05 /* Placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Placeholder.png; sourceTree = "<group>"; };
-		D72240621C0D0129002C6C11 /* MoviePlayerAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviePlayerAppDelegate.swift; sourceTree = "<group>"; };
-		D72240641C0D031C002C6C11 /* MyPlayerLayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPlayerLayerView.swift; sourceTree = "<group>"; };
-		D72240661C0D073E002C6C11 /* MyStreamingMovieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStreamingMovieViewController.swift; sourceTree = "<group>"; };
-		D77FEF7C1C368A5B00DC9183 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
-		D77FEF801C368AE000DC9183 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		AFC612DA1CDB117E003917D6 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		D7DA9A0F1E50731300F9C60B /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		D7DA9A101E50731300F9C60B /* ReadMe.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = ReadMe.md; sourceTree = "<group>"; };
+		D7DA9A151E50736000F9C60B /* README2.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README2.md; sourceTree = "<group>"; };
+		D7DA9A171E5073F000F9C60B /* MoviePlayerAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviePlayerAppDelegate.swift; sourceTree = "<group>"; };
+		D7DA9A181E5073F000F9C60B /* MyPlayerLayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPlayerLayerView.swift; sourceTree = "<group>"; };
+		D7DA9A191E5073F000F9C60B /* MyStreamingMovieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStreamingMovieViewController.swift; sourceTree = "<group>"; };
 		DB121E0C11A5D902005A0939 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		DB2407C911AF8CCC00A5312B /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -73,9 +74,9 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				D72240621C0D0129002C6C11 /* MoviePlayerAppDelegate.swift */,
-				D72240661C0D073E002C6C11 /* MyStreamingMovieViewController.swift */,
-				D72240641C0D031C002C6C11 /* MyPlayerLayerView.swift */,
+				D7DA9A171E5073F000F9C60B /* MoviePlayerAppDelegate.swift */,
+				D7DA9A191E5073F000F9C60B /* MyStreamingMovieViewController.swift */,
+				D7DA9A181E5073F000F9C60B /* MyPlayerLayerView.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -91,8 +92,9 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				538CB4EF0DE329E400931BDA /* ReadMe.txt */,
-				D77FEF801C368AE000DC9183 /* README.md */,
+				D7DA9A0F1E50731300F9C60B /* LICENSE.txt */,
+				D7DA9A101E50731300F9C60B /* ReadMe.md */,
+				D7DA9A151E50736000F9C60B /* README2.md */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -127,13 +129,13 @@
 		AF66B2A6134BE57A00A83A05 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				AFC612DA1CDB117E003917D6 /* Default-568h@2x.png */,
 				AF66B2A7134BE57A00A83A05 /* Icon-72.png */,
 				AF66B2A8134BE57A00A83A05 /* Icon-Small-50.png */,
 				AF66B2A9134BE57A00A83A05 /* Icon-Small.png */,
 				AF66B2AA134BE57A00A83A05 /* Icon-Small@2x.png */,
 				AF66B2AB134BE57A00A83A05 /* Icon.png */,
 				AF66B2AC134BE57A00A83A05 /* Icon@2x.png */,
-				D77FEF7C1C368A5B00DC9183 /* Default-568h@2x.png */,
 				AF66B2AD134BE57A00A83A05 /* iTunesArtwork */,
 				AF66B2AE134BE57A00A83A05 /* Placeholder.png */,
 			);
@@ -166,8 +168,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0730;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
 						LastSwiftMigration = 0820;
@@ -200,7 +201,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				53F69CEE0DDB4A390051C004 /* MainWindow.xib in Resources */,
-				D77FEF7D1C368A5B00DC9183 /* Default-568h@2x.png in Resources */,
+				AFC612DB1CDB117E003917D6 /* Default-568h@2x.png in Resources */,
 				8487EAAA0F8A5E2B00B9E9B0 /* StreamingView.xib in Resources */,
 				AF66B2AF134BE57A00A83A05 /* Icon-72.png in Resources */,
 				AF66B2B0134BE57A00A83A05 /* Icon-Small-50.png in Resources */,
@@ -220,9 +221,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D72240651C0D031C002C6C11 /* MyPlayerLayerView.swift in Sources */,
-				D72240631C0D0129002C6C11 /* MoviePlayerAppDelegate.swift in Sources */,
-				D77FEF8B1C368FA900DC9183 /* MyStreamingMovieViewController.swift in Sources */,
+				D7DA9A1A1E5073F000F9C60B /* MoviePlayerAppDelegate.swift in Sources */,
+				D7DA9A1B1E5073F000F9C60B /* MyPlayerLayerView.swift in Sources */,
+				D7DA9A1C1E5073F000F9C60B /* MyStreamingMovieViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,7 +261,7 @@
 				GCC_PREFIX_HEADER = StitchedStreamPlayer_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yourcompany.${PRODUCT_NAME:identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.StitchedStreamPlayer";
 				PRODUCT_NAME = StitchedStreamPlayer;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -277,7 +278,7 @@
 				GCC_PREFIX_HEADER = StitchedStreamPlayer_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yourcompany.${PRODUCT_NAME:identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.StitchedStreamPlayer";
 				PRODUCT_NAME = StitchedStreamPlayer;
 				SWIFT_VERSION = 3.0;
 			};
@@ -286,27 +287,11 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
@@ -320,31 +305,14 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
